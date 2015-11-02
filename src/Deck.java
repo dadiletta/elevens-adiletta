@@ -30,11 +30,18 @@ public class Deck {
 	 * @param values is an array containing all of the card point values.
 	 */
 	public Deck(String[] ranks, String[] suits, int[] values) {
-        cards = new ArrayList<Card>();
-        for (int j = 0; j < ranks.length; j++) {
-            for (String suitString : suits){
-                cards.add(new Card(ranks[j], suitString, values[j]));
-            }
+                assert values.length == ranks.length : "Yo brobroa, your ranks is not the same as your values";
+                assert suits.length != 0 && values.length != 0 : "Suits is empty!";
+                cards = new ArrayList<Card>();
+		for (int j = 0; j < ranks.length; j++) {
+			assert j < values.length : "counter is larger than the values array";
+                        for (String suitString : suits) {
+				cards.add(new Card(ranks[j], suitString, values[j]));
+			}
+		}
+                assert !cards.isEmpty() : "Cards' size is equal to zero. That's not right.";
+		shuffle();
+                assert !this.isEmpty() : "This deck is reporting that it is empty!";
 	}
 
 
@@ -43,7 +50,7 @@ public class Deck {
 	 * @return true if this deck is empty, false otherwise.
 	 */
 	public boolean isEmpty() {
-		/* *** TO BE IMPLEMENTED IN ACTIVITY 2 *** */
+		return size <= 0;
 	}
 
 	/**
@@ -51,7 +58,7 @@ public class Deck {
 	 * @return the number of undealt cards in this deck.
 	 */
 	public int size() {
-		/* *** TO BE IMPLEMENTED IN ACTIVITY 2 *** */
+		return size;
 	}
 
 	/**
@@ -59,7 +66,15 @@ public class Deck {
 	 * and reset the size to represent the entire deck.
 	 */
 	public void shuffle() {
-		/* *** TO BE IMPLEMENTED IN ACTIVITY 4 *** */
+		for (int k = cards.size() - 1; k > 0; k--) {
+                        assert k < cards.size() : "The counter, k, is larger than our arraylist.";
+                        int randPos = (int) (Math.random() * (k+2));
+                        assert randPos < cards.size() : "Our random number is out of bounds";
+			Card temp = cards.get(k);
+			cards.set(k, cards.get(randPos));
+			cards.set(randPos, temp);
+		}
+		size = cards.size();
 	}
 
 	/**
@@ -68,11 +83,14 @@ public class Deck {
 	 *         previously dealt.
 	 */
 	public Card deal() {
-		/* *** TO BE IMPLEMENTED IN ACTIVITY 2 *** */
-        // IS EMPTY if so return null
-        size--;
-        Card c = cards.get(size);
-        return c;
+		if (isEmpty()) {
+                        assert this.size == 0 : "The deck is not actually empty";
+			return null;
+		}
+                assert this.size > 0 : "The deck is actually empty!";
+                size--;
+		Card c = cards.get(size);  
+		return c;
 	}
 
 	/**
